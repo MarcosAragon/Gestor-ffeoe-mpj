@@ -503,6 +503,10 @@ function cerrarModalTutors() {
     const displayEl = document.getElementById('at-tutor-laboral-display');
     if (displayEl) { displayEl.textContent = '-- Selecciona Tutor Laboral --'; displayEl.classList.add('placeholder'); }
     
+    // Resetear horas al valor por defecto
+    const horasInput = document.getElementById('at-horas-practicas');
+    if (horasInput) horasInput.value = 380;
+
     // Ocultar y limpiar el display de info del tutor
     const infoDisplay = document.getElementById('at-tutor-laboral-info-display');
     if (infoDisplay) {
@@ -576,13 +580,14 @@ export function initPlazasEvents() {
         const empresaId = document.getElementById('at-empresa-id').value;
         const docenteId = document.getElementById('at-tutor-docente').value;
         const laboralNombre = document.getElementById('at-tutor-laboral').value;
+        const horas = parseInt(document.getElementById('at-horas-practicas').value) || 380;
 
         // Armar URL con query params opcionales
         let url = `${API_BASE_URL}/api/v1/asignaciones/${alumnoId}/${empresaId}`;
-        const params = [];
+        const params = [`horas=${horas}`];
         if (docenteId) params.push(`tutor_docente_id=${docenteId}`);
         if (laboralNombre) params.push(`tutor_laboral_nombre=${encodeURIComponent(laboralNombre)}`);
-        if (params.length > 0) url += `?${params.join('&')}`;
+        url += `?${params.join('&')}`;
 
         try {
             const res = await fetch(url, {
